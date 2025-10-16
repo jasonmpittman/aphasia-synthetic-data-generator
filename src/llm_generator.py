@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+__author__ = "Jason M. Pittman"
+__copyright__ = "Copyright 2025"
+__credits__ = ["Jason M. Pittman"]
+__license__ = "Apache License 2.0"
+__version__ = "0.1.0"
+__maintainer__ = "Jason M. Pittman"
+__status__ = "Research"
+
 """
 LLM Cat Rescue Synthetic Transcript Generator
 

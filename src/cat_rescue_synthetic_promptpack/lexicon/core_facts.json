@@ -1,0 +1,62 @@
+{
+  "1_girl": [
+    "girl",
+    "little girl",
+    "child",
+    "kid"
+  ],
+  "2_tricycle": [
+    "tricycle",
+    "trike",
+    "three-wheeled bike"
+  ],
+  "3_cat_in_tree": [
+    "cat in the tree",
+    "cat up the tree",
+    "cat stuck in the tree",
+    "kitty in the tree"
+  ],
+  "4_father_in_tree": [
+    "man in the tree",
+    "dad in the tree",
+    "father stuck",
+    "father up the tree"
+  ],
+  "5_fallen_ladder": [
+    "ladder fell",
+    "ladder on the ground",
+    "fallen ladder",
+    "ladder knocked over"
+  ],
+  "6_dog_barking": [
+    "dog barking",
+    "dog at the tree",
+    "dog below the tree",
+    "barking dog"
+  ],
+  "7_firefighters_arriving": [
+    "firefighters running",
+    "firemen coming",
+    "rescuers arriving"
+  ],
+  "8_fire_truck_present": [
+    "fire truck",
+    "engine parked",
+    "fire engine"
+  ],
+  "9_firefighters_with_ladder": [
+    "carrying a ladder",
+    "bringing a ladder",
+    "firefighters with ladder"
+  ],
+  "11_rescue_cat_goal": [
+    "rescue the cat",
+    "get the cat down",
+    "save the cat"
+  ],
+  "12_dad_needs_rescue": [
+    "get dad down",
+    "rescue the father",
+    "help the man"
+  ]
+}

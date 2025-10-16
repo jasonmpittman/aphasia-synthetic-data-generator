@@ -1,0 +1,59 @@
+version: 1
+scene_version: catrescue_v1
+one_model_at_a_time: true
+
+severity_profiles:
+  mild:
+    ciu_range: [0.60, 0.75]
+    min_core_facts: 8
+    max_len: 160
+    error_weights: {phonemic: 0.1, semantic: 0.2, neologism: 0.0, agrammatism: 0.2, circumlocution: 0.2, perseveration: 0.1, disfluency: 0.2}
+  moderate:
+    ciu_range: [0.40, 0.60]
+    min_core_facts: 6
+    max_len: 140
+    error_weights: {phonemic: 0.2, semantic: 0.3, neologism: 0.05, agrammatism: 0.3, circumlocution: 0.3, perseveration: 0.2, disfluency: 0.3}
+  severe:
+    ciu_range: [0.20, 0.40]
+    min_core_facts: 4
+    max_len: 110
+    error_weights: {phonemic: 0.4, semantic: 0.4, neologism: 0.15, agrammatism: 0.5, circumlocution: 0.2, perseveration: 0.3, disfluency: 0.5}
+  very_severe:
+    ciu_range: [0.00, 0.20]
+    min_core_facts: 2
+    max_len: 80
+    error_weights: {phonemic: 0.5, semantic: 0.5, neologism: 0.3, agrammatism: 0.7, circumlocution: 0.1, perseveration: 0.5, disfluency: 0.7}
+
+dataset_plan:
+  total_per_severity_per_model: 100
+  prompt_templates_per_severity: 4
+  generations_per_template: 25
+  dialect: neutral_en
+  register: adult_neutral
+
+decoding_profiles:
+  mild:        {temperature: 0.5, top_p: 0.9, presence_penalty: 0.2, frequency_penalty: 0.1}
+  moderate:    {temperature: 0.7, top_p: 0.9, presence_penalty: 0.4, frequency_penalty: 0.2}
+  severe:      {temperature: 0.9, top_p: 0.9, presence_penalty: 0.6, frequency_penalty: 0.2}
+  very_severe: {temperature: 1.0, top_p: 0.95, presence_penalty: 0.7, frequency_penalty: 0.3}
+
+error_model:
+  hesitation_tokens: ["uh", "um", "...", "[pause]"]
+  repair_markers: {"self_repair_open":"[", "self_repair_close":"]"}
+  perseveration_marker: "[rep]"
+  nonword_style: {first_use_caps: true}
+  orthography_rules:
+    phonemic_subs: true
+    drop_function_words: true
+    telegraphic_abbrev: true
+
+qc:
+  reject_if_out_of_band_ciu: true
+  reject_if_missing_core_facts: true
+  strip_phi: true
+  ban_medical_advice: true
+  profanity_filter: true
+  max_tokens: 220
+
+license: CC-BY-4.0
+attribution: ["You (PI)", "Model family (Llama 3 8B / Mistral / DeepSeek)"]

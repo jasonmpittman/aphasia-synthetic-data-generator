@@ -17,7 +17,7 @@ import json
 from dataclasses import dataclass
 
 import nltk
-nltk.download()
+#nltk.download()
 
 @dataclass
 class PartsOfSpeech():
@@ -51,19 +51,32 @@ class PartsOfSpeech():
     sluice_frequency: int
 
 @dataclass
-class LanguageMeasures():
-    #   lexical diversity
-    ttr: int
-    mtld: int
+class LexicalRichness():
+    #   lexical variation
+    ttr: int    #   type-token ratio
+    mtld: int   #   measure of textual lexical diversity
+    ndw: int    #  number of different words
+
+    #   lexical density
+    ld: int     #   lexical density
 
 
-def measure_lexcical_diversity(text: str):
+def measure_ttr(text: str):
     """
-    
+    Calculate the Type-Token Ratio for a given text sample.
+
     Args:
+        text: the text to analyze using type-token ratio
 
     Returns:
+        ttr: the calculated type-token ratio
     """
+
+    words = text.lower().split(' ')
+    unique_words = set(words)
+    ttr = len(unique_words) / len(words)
+
+    return ttr
 
 
 def measure_parts_of_speech():
@@ -98,34 +111,44 @@ def measure_number_fillers():
     Returns:
     """
 
-def read_json(file: str) -> list:
+def read_input(file: str) -> list:
     """
     
     Args:
 
     Returns:
     """
+
     synthetic_data = []
 
-    try:
-        with open(file, 'r') as f:
-            data = json.load(file)
-    except FileNotFoundError:
-        print("Error: The file was not found.")
-    except PermissionError:
-        print("Error: Insufficient permissions to access the file.")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+    #   if filename contains csv
+    if ".csv" in file:
+        try:
+            pass
+        except FileNotFoundError:
+            print("Error: The csv file was not found.")
+        except PermissionError:
+            print("Error: Insufficient permissions to access the csv file.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
-    #   if file contains csv
-
-    #   if file contains json
+    #   if filename contains json
+    if ".json" in file or ".jsonl" in file:
+        try:
+            with open(file, 'r') as f:
+                data = json.load(file)
+        except FileNotFoundError:
+            print("Error: The json file was not found.")
+        except PermissionError:
+            print("Error: Insufficient permissions to access the json file.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
     return synthetic_data
 
 def main(input: str, operation: str):
-    
-    if args.operation == "":
+
+    if args.operation == "ttr":
         pass
 
 

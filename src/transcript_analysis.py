@@ -13,8 +13,9 @@ __status__ = "Research"
 """
 
 import os
-import argparse
+import csv
 import json
+import argparse
 from dataclasses import dataclass
 
 import nltk
@@ -120,14 +121,17 @@ def read_input(file: str) -> list:
     Returns:
     """
 
+    synthetic_data = []
     base_path = os.path.join(os.getcwd(), 'data/')
 
     #   if filename contains csv
     if ".csv" in file:
         try:
             csv_file = base_path + file
-            with open(csv_file, "r") as f:
-                synthetic_data = f.readlines()
+            with open(csv_file, 'r', newline='') as f:
+                csv_reader = csv.reader(f)
+                for row in csv_reader:
+                    synthetic_data.append(row[7])
         except FileNotFoundError:
             print("Error: The csv file was not found.")
         except PermissionError:

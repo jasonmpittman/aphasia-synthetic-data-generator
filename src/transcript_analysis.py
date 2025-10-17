@@ -50,14 +50,21 @@ class PartsOfSpeech():
     sluices: list
     sluice_frequency: int
 
-def measure_lexcical_diversity():
+@dataclass
+class LanguageMeasures():
+    #   lexical diversity
+    ttr: int
+    mtld: int
+
+
+def measure_lexcical_diversity(text: str):
     """
     
     Args:
 
     Returns:
     """
-    pass
+
 
 def measure_parts_of_speech():
     """

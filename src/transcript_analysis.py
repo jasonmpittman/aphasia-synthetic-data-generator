@@ -12,6 +12,7 @@ __status__ = "Research"
 
 """
 
+import os
 import argparse
 import json
 from dataclasses import dataclass
@@ -119,12 +120,14 @@ def read_input(file: str) -> list:
     Returns:
     """
 
-    synthetic_data = []
+    base_path = os.path.join(os.getcwd(), 'data/')
 
     #   if filename contains csv
     if ".csv" in file:
         try:
-            pass
+            csv_file = base_path + file
+            with open(csv_file, "r") as f:
+                synthetic_data = f.readlines()
         except FileNotFoundError:
             print("Error: The csv file was not found.")
         except PermissionError:
@@ -147,9 +150,10 @@ def read_input(file: str) -> list:
     return synthetic_data
 
 def main(input: str, operation: str):
+    synthetic_data = read_input(args.input)
 
     if args.operation == "ttr":
-        pass
+        print(synthetic_data)
 
 
 if __name__ == "__main__":

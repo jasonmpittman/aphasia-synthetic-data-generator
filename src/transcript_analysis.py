@@ -23,9 +23,13 @@ from collections import Counter
 from dataclasses import dataclass
 
 import nltk
+from nltk.tag import pos_tag
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
+from nltk.probability import FreqDist
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 @dataclass
 class PartsOfSpeech():
@@ -132,7 +136,29 @@ def measure_ndw_er50(words: list, num_samples=10, sample_size=50) -> float:
     
     return ndw_er50
 
-def measure_parts_of_speech():
+def measure_lexical_density(words: list) -> float:
+
+    tagged_words = pos_tag(words)
+
+    # Define content word categories (simplified)
+    # This can be refined based on specific linguistic criteria
+    content_word_tags = ['NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS']
+
+    # Count content words
+    content_words_count = 0
+    for word, tag in tagged_words:
+        if tag in content_word_tags:
+            content_words_count += 1
+
+    # Calculate lexical density
+    total_words_count = len(words)
+    if total_words_count > 0:
+        lexical_density = content_words_count / total_words_count
+        return round(lexical_density, 2)
+    else:
+        return 0.0
+
+def measure_parts_of_speech(words: list):
     """
     
     Args:
@@ -157,7 +183,6 @@ def measure_average_length(words: list) -> float:
         divisor += 1
     
     return round(dividend / divisor, 2)
-
 
 def measure_number_words(words: list) -> int:
     """
@@ -269,14 +294,21 @@ def main(input: str, operation: str):
             words = word_tokenize(data.replace("Participants: ", ""))
             averages.append(measure_average_length(words))
         
-        print(averages)
+    if args.operation == "ld":
+        lds = []
+
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participant: ", ""))
+            lds.append(measure_lexical_density(words))
+        
+        print(lds)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count, filler, avg")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, filler, avg")
 
     args = parser.parse_args()
     main(args.input, args.operation)

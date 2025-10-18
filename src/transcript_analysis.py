@@ -23,8 +23,9 @@ from collections import Counter
 from dataclasses import dataclass
 
 import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
-#nltk.download()
 
 @dataclass
 class PartsOfSpeech():
@@ -158,13 +159,22 @@ def measure_number_words(words: list) -> int:
     """
     return len(words)
 
-def measure_number_fillers():
+def measure_number_fillers(words: list) -> int:
     """
-    
+    Calculate the number of filler words.
     Args:
+        words (list): the list of words to count filler (stop) words from
 
     Returns:
+        int: number of filler (stop) words based on NLTK stopwords dictionary
     """
+
+    stop_word_set = set(stopwords.words('english'))
+
+    stop_words = [word for word in words if word in stop_word_set]
+
+    return len(stop_words)
+
 
 #   TODO: need to implement json/jsonl reader
 def read_input(file: str) -> list:
@@ -234,14 +244,21 @@ def main(input: str, operation: str):
             words = word_tokenize(data.replace("Participants: ", ""))
             word_counts.append(measure_number_words(words))
 
-        print(word_counts)
+    if args.operation == "filler":
+        filler_word_counts = []
+        
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participants: ", "")) 
+            filler_word_counts.append(measure_number_fillers(words))
+
+        print(filler_word_counts)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count, filler")
 
     args = parser.parse_args()
     main(args.input, args.operation)

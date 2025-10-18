@@ -88,7 +88,7 @@ def measure_ttr(text: str) -> float:
     unique_words = set(words)
     ttr = len(unique_words) / len(words)
 
-    return ttr
+    return round(ttr, 2)
 
 def measure_ndw(words: list) -> float:
     """
@@ -211,8 +211,6 @@ def measure_number_fillers(words: list) -> int:
 
     return len(stop_words)
 
-
-#   TODO: need to implement json/jsonl reader
 def read_input(file: str) -> list:
     """
     Read a CSV or JSON/JSONL synthetic data file.
@@ -243,9 +241,21 @@ def read_input(file: str) -> list:
 
     #   if filename contains json
     if ".json" in file or ".jsonl" in file:
+        data = []
         try:
-            with open(file, 'r') as f:
-                data = json.load(file)
+            json_file = base_path + file
+            with open(json_file, 'r') as f:
+                for line in f:
+                    stripped_line = line.strip()
+                    if stripped_line:
+                        try:
+                            json_object = json.loads(stripped_line)
+                            data.append(json_object)
+                        except json.JSONDecodeError as e:
+                            print(f"Error decoding JSON on line: {stripped_line}. Error: {e}")
+                
+                for item in data:
+                    synthetic_data.append(item['transcript'])
         except FileNotFoundError:
             print("Error: The json file was not found.")
         except PermissionError:
@@ -256,14 +266,17 @@ def read_input(file: str) -> list:
     return synthetic_data
 
 #   TODO: need to design a data structure for 'transcripts'
+#   TODO: i think we remove filler words before measures
 def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
-
+    
     if args.operation == "ttr":
         ttrs = []
         for data in synthetic_data:
             #   TODO: should we tokenize first here?
             ttrs.append(measure_ttr(data.replace("Participant: ", "")))
+        
+        print(ttrs)
 
     if args.operation == "ndw":
         ndws = []

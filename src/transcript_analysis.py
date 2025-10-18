@@ -90,10 +90,10 @@ def measure_ndw(words: list) -> float:
     Calculates the NDW (Number of Different Words).
 
     Args:
-        words (list): The input text to analyze.
+        words (list): the input text to analyze.
 
     Returns:
-        float: The NDW-ER50 score, which is the mean number of unique words across all samples.
+        float: the NDW-ER50 score, which is the mean number of unique words across all samples.
     """
 
     unique_words = set(words)
@@ -104,12 +104,12 @@ def measure_ndw_er50(words: list, num_samples=10, sample_size=50) -> float:
     Calculates the NDW-ER50 (Number of Different Words - Estimated from Random 50-word samples).
 
     Args:
-        words (list): The input text to analyze.
-        num_samples (int): The number of random samples to take.
-        sample_size (int): The size of each random word sample.
+        words (list): the input text to analyze.
+        num_samples (int): the number of random samples to take.
+        sample_size (int): the size of each random word sample.
 
     Returns:
-        float: The NDW-ER50 score, which is the mean number of unique words across all samples.
+        float: the NDW-ER50 score, which is the mean number of unique words across all samples.
     """
     
     # Check if there are enough words to create samples
@@ -131,7 +131,6 @@ def measure_ndw_er50(words: list, num_samples=10, sample_size=50) -> float:
     
     return ndw_er50
 
-
 def measure_parts_of_speech():
     """
     
@@ -148,13 +147,16 @@ def measure_utterance_length():
     Returns:
     """
 
-def measure_number_words():
+def measure_number_words(words: list) -> int:
     """
-    
+    Calculate the number of words.
     Args:
+        words (list): the list of words to count
 
     Returns:
+        int: the count of words
     """
+    return len(words)
 
 def measure_number_fillers():
     """
@@ -221,19 +223,25 @@ def main(input: str, operation: str):
         ndws = []
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", ""))
-            if len(words) > 50:
+            if measure_number_words(words) > 50:
                 ndws.append(measure_ndw_er50(words))
             else:
                 ndws.append(measure_ndw(words))
 
-        print(ndws)
+    if args.operation == "count":
+        word_counts = [] 
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participants: ", ""))
+            word_counts.append(measure_number_words(words))
+
+        print(word_counts)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count")
 
     args = parser.parse_args()
     main(args.input, args.operation)

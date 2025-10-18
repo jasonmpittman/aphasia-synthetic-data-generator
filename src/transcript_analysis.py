@@ -140,13 +140,24 @@ def measure_parts_of_speech():
     Returns:
     """
 
-def measure_utterance_length():
+def measure_average_length(words: list) -> float:
     """
-    
+    Calculate the average word length.    
     Args:
+        words (list): the input text to analyze
 
     Returns:
+        float: the average word length
     """
+    divisor = 0
+    dividend = 0
+
+    for word in words:
+        dividend += len(word)
+        divisor += 1
+    
+    return round(dividend / divisor, 2)
+
 
 def measure_number_words(words: list) -> int:
     """
@@ -251,14 +262,21 @@ def main(input: str, operation: str):
             words = word_tokenize(data.replace("Participants: ", "")) 
             filler_word_counts.append(measure_number_fillers(words))
 
-        print(filler_word_counts)
+    if args.operation == "avg":
+        averages = []
+
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participants: ", ""))
+            averages.append(measure_average_length(words))
+        
+        print(averages)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count, filler")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, count, filler, avg")
 
     args = parser.parse_args()
     main(args.input, args.operation)

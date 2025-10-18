@@ -9,17 +9,21 @@ __status__ = "Research"
 """
 
 
-
+Lexical richness measures derived from:
+Yang, Y., & Zheng, Z. (2024). A Refined and Concise Model of Indices for Quantitatively Measuring Lexical Richness of Chinese University Students' EFL Writing. Contemporary Educational Technology, 16(3).
 """
 
 import os
 import re
 import csv
 import json
+import random
 import argparse
+from collections import Counter
 from dataclasses import dataclass
 
 import nltk
+from nltk.tokenize import word_tokenize
 #nltk.download()
 
 @dataclass
@@ -64,15 +68,15 @@ class LexicalRichness():
     ld: int     #   lexical density
 
 
-def measure_ttr(text: str):
+def measure_ttr(text: str) -> float:
     """
     Calculate the Type-Token Ratio for a given text sample.
 
     Args:
-        text: the text to analyze using type-token ratio
+        text (str): the text to analyze using type-token ratio
 
     Returns:
-        ttr: the calculated type-token ratio
+        ttr (float): the calculated type-token ratio
     """
 
     words = text.lower().split(' ')
@@ -80,6 +84,52 @@ def measure_ttr(text: str):
     ttr = len(unique_words) / len(words)
 
     return ttr
+
+def measure_ndw(words: list) -> float:
+    """
+    Calculates the NDW (Number of Different Words).
+
+    Args:
+        words (list): The input text to analyze.
+
+    Returns:
+        float: The NDW-ER50 score, which is the mean number of unique words across all samples.
+    """
+
+    unique_words = set(words)
+    return len(unique_words)   
+
+def measure_ndw_er50(words: list, num_samples=10, sample_size=50) -> float:
+    """
+    Calculates the NDW-ER50 (Number of Different Words - Estimated from Random 50-word samples).
+
+    Args:
+        words (list): The input text to analyze.
+        num_samples (int): The number of random samples to take.
+        sample_size (int): The size of each random word sample.
+
+    Returns:
+        float: The NDW-ER50 score, which is the mean number of unique words across all samples.
+    """
+    
+    # Check if there are enough words to create samples
+    if len(words) < sample_size:
+        raise ValueError(f"Input text has fewer than {sample_size} words.")
+
+    unique_word_counts = []
+    
+    for _ in range(num_samples):
+        # Generate a random 50-word sample
+        sample = random.sample(words, sample_size)
+        
+        # Count the number of unique words in the sample
+        unique_word_count = len(Counter(sample))
+        unique_word_counts.append(unique_word_count)
+        
+    # Calculate the mean of the unique word counts
+    ndw_er50 = sum(unique_word_counts) / len(unique_word_counts)
+    
+    return ndw_er50
 
 
 def measure_parts_of_speech():
@@ -157,23 +207,33 @@ def read_input(file: str) -> list:
 
     return synthetic_data
 
+#   TODO: need to design a data structure for 'transcripts'
 def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
 
     if args.operation == "ttr":
         ttrs = []
         for data in synthetic_data:
+            #   TODO: should we tokenize first here?
             ttrs.append(measure_ttr(data.replace("Participant: ", "")))
-        
 
-        print(ttrs)
+    if args.operation == "ndw":
+        ndws = []
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participants: ", ""))
+            if len(words) > 50:
+                ndws.append(measure_ndw_er50(words))
+            else:
+                ndws.append(measure_ndw(words))
+
+        print(ndws)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50")
 
     args = parser.parse_args()
     main(args.input, args.operation)

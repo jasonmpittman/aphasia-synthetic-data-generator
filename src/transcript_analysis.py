@@ -13,6 +13,7 @@ __status__ = "Research"
 """
 
 import os
+import re
 import csv
 import json
 import argparse
@@ -113,14 +114,17 @@ def measure_number_fillers():
     Returns:
     """
 
+#   TODO: need to implement json/jsonl reader
 def read_input(file: str) -> list:
     """
-    
+    Read a CSV or JSON/JSONL synthetic data file.
+
     Args:
+        file: the csv or json/jsonl file to be read.
 
     Returns:
+        synthetic_data: the 'transcript' column from a csv or the 'transcript' field from json/jsonl
     """
-
     synthetic_data = []
     base_path = os.path.join(os.getcwd(), 'data/')
 
@@ -131,7 +135,7 @@ def read_input(file: str) -> list:
             with open(csv_file, 'r', newline='') as f:
                 csv_reader = csv.reader(f)
                 for row in csv_reader:
-                    synthetic_data.append(row[7])
+                    synthetic_data.append(row[7]) # column 7 is 'transcript'
         except FileNotFoundError:
             print("Error: The csv file was not found.")
         except PermissionError:
@@ -157,8 +161,12 @@ def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
 
     if args.operation == "ttr":
-        print(synthetic_data)
+        ttrs = []
+        for data in synthetic_data:
+            ttrs.append(measure_ttr(data.replace("Participant: ", "")))
+        
 
+        print(ttrs)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

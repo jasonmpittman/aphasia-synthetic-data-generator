@@ -296,13 +296,16 @@ def main(input: str, operation: str):
         print(ttrs)
 
     if args.operation == "ndw":
-        ndws = []
+        filtered_ndws = []
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", ""))
+            filtered_words = remove_number_filler_words(words)
             if measure_number_words(words) > 50:
-                ndws.append(measure_ndw_er50(words))
+                filtered_ndws.append(measure_ndw_er50(filtered_words))
             else:
-                ndws.append(measure_ndw(words))
+                filtered_ndws.append(measure_ndw(filtered_words))
+
+        print(filtered_ndws)
 
     if args.operation == "count":
         word_counts = [] 

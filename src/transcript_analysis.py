@@ -197,7 +197,7 @@ def measure_number_words(words: list) -> int:
 
 def measure_number_stopwords(words: list) -> int:
     """
-    Calculate the number of filler words.
+    Calculate the number of stopwords.
     Args:
         words (list): the list of words to count filler (stop) words from
 
@@ -210,6 +210,23 @@ def measure_number_stopwords(words: list) -> int:
     stop_words = [word for word in words if word in stop_word_set]
 
     return len(stop_words)
+
+def remove_number_filler_words(words: list) -> list:
+    """
+    Remove number of filler words.
+    Args:
+        words (list): the list of words to remove filler words from
+
+    Returns:
+        int: number of filler words based on NLTK stopwords dictionary
+        list: the filtered collection of words
+    """
+
+    FILLER_WORDS = {"and", "um", "uh", "so", "then", "uh-huh", "um-hum", "nope", "yup", "ah", "oh"}
+
+    filtered_words = [word for word in words if word.lower() not in FILLER_WORDS]
+
+    return filtered_words
 
 def read_input(file: str) -> list:
     """
@@ -269,8 +286,6 @@ def read_input(file: str) -> list:
 #   TODO: i think we remove filler words before measures
 def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
-    
-    FILLER_WORDS = {"and", "um", "uh", "so", "then", "uh-huh", "um-hum", "nope", "yup", "ah", "oh"}
 
     if args.operation == "ttr":
         ttrs = []
@@ -301,15 +316,16 @@ def main(input: str, operation: str):
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", "")) 
             stopword_counts.append(measure_number_stopwords(words))
-        
-        print(stopword_counts)
 
     if args.operation == "avg":
-        averages = []
+        filtered_averages = []
 
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", ""))
-            averages.append(measure_average_length(words))
+            filtered_words = remove_number_filler_words(words)
+            filtered_averages.append(measure_average_length(filtered_words))
+
+        print(filtered_averages)
         
     if args.operation == "ld":
         lds = []

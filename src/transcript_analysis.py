@@ -308,10 +308,14 @@ def main(input: str, operation: str):
         print(filtered_ndws)
 
     if args.operation == "count":
-        word_counts = [] 
+        filtered_word_counts = [] 
+
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", ""))
-            word_counts.append(measure_number_words(words))
+            filtered_words = remove_number_filler_words(words)
+            filtered_word_counts.append(measure_number_words(words))
+
+        print(filtered_word_counts)
 
     if args.operation == "stop":
         stopword_counts = []

@@ -230,7 +230,7 @@ def remove_number_filler_words(words: list) -> list:
 def calculate_mean(values: list) -> float:
     mean = sum(values) / len(values)
 
-    return mean
+    return round(mean, 2)
 
 def read_input(file: str) -> list:
     """
@@ -299,6 +299,7 @@ def main(input: str, operation: str):
             filtered_ttrs.append(measure_ttr(filtered_words))
         
         print(filtered_ttrs)
+        print(f'The mean TTR is: {calculate_mean(filtered_ttrs)}')
 
     if args.operation == "ndw":
         filtered_ndws = []
@@ -311,6 +312,7 @@ def main(input: str, operation: str):
                 filtered_ndws.append(measure_ndw(filtered_words))
 
         print(filtered_ndws)
+        print(f'The mean NDW is: {calculate_mean(filtered_ndws)}')
 
     if args.operation == "count":
         filtered_word_counts = [] 
@@ -321,6 +323,7 @@ def main(input: str, operation: str):
             filtered_word_counts.append(measure_number_words(words))
 
         print(filtered_word_counts)
+        print(f'The mean number of words is: {calculate_mean(filtered_word_counts)}')
 
     if args.operation == "stop":
         stopword_counts = []
@@ -328,6 +331,9 @@ def main(input: str, operation: str):
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", "")) 
             stopword_counts.append(measure_number_stopwords(words))
+        
+        print(stopword_counts)
+        print(f'The mean number of stopwords is: {calculate_mean(stopword_counts)}')
 
     if args.operation == "avg":
         filtered_averages = []
@@ -338,6 +344,7 @@ def main(input: str, operation: str):
             filtered_averages.append(measure_average_length(filtered_words))
 
         print(filtered_averages)
+        print(f'The mean number of average word lengths is: {calculate_mean(filtered_averages)}')
         
     if args.operation == "ld":
         filtered_lds = []
@@ -348,6 +355,7 @@ def main(input: str, operation: str):
             filtered_lds.append(measure_lexical_density(words))
         
         print(filtered_lds)
+        print(f'The mean LDS is: {calculate_mean(filtered_lds)}')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

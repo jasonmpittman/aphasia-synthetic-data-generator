@@ -73,7 +73,7 @@ class LexicalRichness():
     ld: int     #   lexical density
 
 
-def measure_ttr(text: str) -> float:
+def measure_ttr(words: list) -> float:
     """
     Calculate the Type-Token Ratio for a given text sample.
 
@@ -84,7 +84,6 @@ def measure_ttr(text: str) -> float:
         ttr (float): the calculated type-token ratio
     """
 
-    words = text.lower().split(' ')
     unique_words = set(words)
     ttr = len(unique_words) / len(words)
 
@@ -288,12 +287,14 @@ def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
 
     if args.operation == "ttr":
-        ttrs = []
+        filtered_ttrs = []
+
         for data in synthetic_data:
-            #   TODO: should we tokenize first here?
-            ttrs.append(measure_ttr(data.replace("Participant: ", "")))
+            words = word_tokenize(data.replace("Participant: ", ""))
+            filtered_words = remove_number_filler_words(words)
+            filtered_ttrs.append(measure_ttr(filtered_words))
         
-        print(ttrs)
+        print(filtered_ttrs)
 
     if args.operation == "ndw":
         filtered_ndws = []

@@ -328,13 +328,14 @@ def main(input: str, operation: str):
         print(filtered_averages)
         
     if args.operation == "ld":
-        lds = []
+        filtered_lds = []
 
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participant: ", ""))
-            lds.append(measure_lexical_density(words))
+            filtered_words = remove_number_filler_words(words)
+            filtered_lds.append(measure_lexical_density(words))
         
-        print(lds)
+        print(filtered_lds)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

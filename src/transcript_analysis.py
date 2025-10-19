@@ -227,6 +227,11 @@ def remove_number_filler_words(words: list) -> list:
 
     return filtered_words
 
+def calculate_mean(values: list) -> float:
+    mean = sum(values) / len(values)
+
+    return mean
+
 def read_input(file: str) -> list:
     """
     Read a CSV or JSON/JSONL synthetic data file.
@@ -282,7 +287,6 @@ def read_input(file: str) -> list:
     return synthetic_data
 
 #   TODO: need to design a data structure for 'transcripts'
-#   TODO: i think we remove filler words before measures
 def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
 

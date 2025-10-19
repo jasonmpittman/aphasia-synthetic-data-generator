@@ -195,7 +195,7 @@ def measure_number_words(words: list) -> int:
     """
     return len(words)
 
-def measure_number_fillers(words: list) -> int:
+def measure_number_stopwords(words: list) -> int:
     """
     Calculate the number of filler words.
     Args:
@@ -270,6 +270,8 @@ def read_input(file: str) -> list:
 def main(input: str, operation: str):
     synthetic_data = read_input(args.input)
     
+    FILLER_WORDS = {"and", "um", "uh", "so", "then", "uh-huh", "um-hum", "nope", "yup", "ah", "oh"}
+
     if args.operation == "ttr":
         ttrs = []
         for data in synthetic_data:
@@ -293,12 +295,14 @@ def main(input: str, operation: str):
             words = word_tokenize(data.replace("Participants: ", ""))
             word_counts.append(measure_number_words(words))
 
-    if args.operation == "filler":
-        filler_word_counts = []
+    if args.operation == "stop":
+        stopword_counts = []
         
         for data in synthetic_data:
             words = word_tokenize(data.replace("Participants: ", "")) 
-            filler_word_counts.append(measure_number_fillers(words))
+            stopword_counts.append(measure_number_stopwords(words))
+        
+        print(stopword_counts)
 
     if args.operation == "avg":
         averages = []
@@ -321,7 +325,7 @@ if __name__ == "__main__":
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, filler, avg")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, stop, avg")
 
     args = parser.parse_args()
     main(args.input, args.operation)

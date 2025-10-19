@@ -357,12 +357,41 @@ def main(input: str, operation: str):
         print(filtered_lds)
         print(f'The mean LDS is: {calculate_mean(filtered_lds)}')
 
+    if args.operation == "all":
+        filtered_ttrs = []
+        filtered_ndws = []
+        filtered_lds = []
+        filtered_word_counts = []
+        filtered_stop_counts = []
+        filtered_averages = []
+
+
+        for data in synthetic_data:
+            words = word_tokenize(data.replace("Participant: ", ""))
+            filtered_words = remove_number_filler_words(words)
+
+            filtered_ttrs.append(measure_ttr(filtered_words))
+
+            if len(filtered_words) > 50:
+                filtered_ndws.append(measure_ndw_er50(filtered_words))
+            else:
+                filtered_ndws.append(measure_ndw(filtered_words))
+            
+            filtered_lds.append(measure_lexical_density(filtered_words))
+            filtered_word_counts.append(measure_number_words(filtered_words))
+            filtered_averages.append(measure_average_length(filtered_words))
+            filtered_stop_counts.append(measure_number_stopwords(filtered_words))
+    
+        print('TTR \t' + 'NDW \t' + 'LD \t' + 'Words \t' + 'Avg Length \t')
+        print(f'{calculate_mean(filtered_ttrs)}\t{calculate_mean(filtered_ndws)}\t{calculate_mean(filtered_lds)}\t{calculate_mean(filtered_word_counts)}\t{calculate_mean(filtered_averages)}')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
-    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, stop, avg")
+    requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, stop, avg, all")
 
     args = parser.parse_args()
     main(args.input, args.operation)

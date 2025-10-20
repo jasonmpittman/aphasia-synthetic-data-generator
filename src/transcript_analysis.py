@@ -261,7 +261,7 @@ def read_input(file: str, severity="mild") -> list:
             with open(csv_file, 'r', newline='') as f:
                 csv_reader = csv.reader(f)
                 for row in csv_reader:
-                    if row[1] == severity:
+                    if row[1].lower() == severity:
                         synthetic_data.append(row[7]) # column 7 is 'transcript'
         except FileNotFoundError:
             print("Error: The csv file was not found.")

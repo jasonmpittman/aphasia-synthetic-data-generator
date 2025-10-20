@@ -228,11 +228,20 @@ def remove_number_filler_words(words: list) -> list:
     return filtered_words
 
 def calculate_mean(values: list) -> float:
+    """
+    Calculate the mean of a list of values
+
+    Args:
+        values (list): a list of integers or floats
+    
+    Returns:
+        float: the caluclated mean rounded to two decimals
+    """
     mean = sum(values) / len(values)
 
     return round(mean, 2)
 
-def read_input(file: str) -> list:
+def read_input(file: str, severity="mild") -> list:
     """
     Read a CSV or JSON/JSONL synthetic data file.
 
@@ -252,7 +261,8 @@ def read_input(file: str) -> list:
             with open(csv_file, 'r', newline='') as f:
                 csv_reader = csv.reader(f)
                 for row in csv_reader:
-                    synthetic_data.append(row[7]) # column 7 is 'transcript'
+                    if row[1] == severity:
+                        synthetic_data.append(row[7]) # column 7 is 'transcript'
         except FileNotFoundError:
             print("Error: The csv file was not found.")
         except PermissionError:
@@ -286,9 +296,8 @@ def read_input(file: str) -> list:
 
     return synthetic_data
 
-#   TODO: need to design a data structure for 'transcripts'
 def main(input: str, operation: str):
-    synthetic_data = read_input(args.input)
+    synthetic_data = read_input(args.input, args.severity)
 
     if args.operation == "ttr":
         filtered_ttrs = []
@@ -391,6 +400,7 @@ if __name__ == "__main__":
     
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument("-in", "--input", required=True, help="specify the name of the transcript file")
+    requiredNamed.add_argument("-s", "--severity", required=True, help="Valid severity types are mild, moderate, severe, very severe, or all")
     requiredNamed.add_argument("-op", "--operation", required=True, help="Valid operations types are: ttr, ndw-er50, ld, count, stop, avg, all")
 
     args = parser.parse_args()

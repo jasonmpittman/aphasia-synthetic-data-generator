@@ -286,7 +286,8 @@ def read_input(file: str, severity="mild") -> list:
                             print(f"Error decoding JSON on line: {stripped_line}. Error: {e}")
                 
                 for item in data:
-                    synthetic_data.append(item['transcript'])
+                    if item['severity'].lower() == severity:
+                        synthetic_data.append(item['transcript'])
         except FileNotFoundError:
             print("Error: The json file was not found.")
         except PermissionError:

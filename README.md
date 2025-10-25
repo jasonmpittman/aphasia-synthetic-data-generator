@@ -1,18 +1,19 @@
-# Project Name
+# Aphasia Synthetic Data Generators
 
-Date created:
-Last updated:
-Deadline: 
+Date created: October 07, 2025  
+Last updated: 0ctober 19, 2025
+
 
 # Project Description
 A brief description of the project or paper abstract.
 
 # People
-**Creator** - full_name, @username  
-**Collaborators** - full_name, @username | full_name, @username
+**Creator** - Jason M. Pittman<sup>1</sup>  
+**Collaborators** - Yesenia Medina-Santos<sup>2</sup> | Anton Phillips Jr<sup>2</sup> | Brie Stark<sup>2</sup>
 
 # Institute
-Institute name, country
+<sup>1</sup> University of Maryland Global Campus USA  
+<sup>2</sup> Indiana University Bloomington, Department of Speech, Language and Hearing Sciences USA
 
 # Directory Structure
 ```
@@ -34,24 +35,4 @@ Institute name, country
 # Links
 (Paper)[http://url.com]
 
-# Current Status
-- [ ] Introduction
-- [ ] Related Work
-- [ ] Method
-- [ ] Results
-- [ ] Conclusions
-- [ ] Abstract
 
-# Plan
-## Problem
-## Purpose
-## Question(s)
-## Deadline
-## Protocol
-## Material
-## Budget
-## Risk Factors
-## Methodology
-## Data Collection
-## Data Analysis
-## Dissemination

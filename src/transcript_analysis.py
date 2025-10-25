@@ -220,7 +220,8 @@ def remove_number_filler_words(words: list) -> list:
         int: number of filler words based on NLTK stopwords dictionary
         list: the filtered collection of words
     """
-
+    #   TODO: remove 'and' because it isn't a filler but it also is not a ciu
+    #   use: &-um, &-uh, &-er, and &-eh.
     FILLER_WORDS = {"and", "um", "uh", "so", "then", "uh-huh", "um-hum", "nope", "yup", "ah", "oh"}
 
     filtered_words = [word for word in words if word.lower() not in FILLER_WORDS]
@@ -261,7 +262,7 @@ def read_input(file: str, severity="mild") -> list:
             with open(csv_file, 'r', newline='') as f:
                 csv_reader = csv.reader(f)
                 for row in csv_reader:
-                    if row[1].lower() == severity:
+                    if row[1] == severity:
                         synthetic_data.append(row[7]) # column 7 is 'transcript'
         except FileNotFoundError:
             print("Error: The csv file was not found.")
@@ -286,7 +287,7 @@ def read_input(file: str, severity="mild") -> list:
                             print(f"Error decoding JSON on line: {stripped_line}. Error: {e}")
                 
                 for item in data:
-                    if item['severity'].lower() == severity:
+                    if item['severity'] == severity:
                         synthetic_data.append(item['transcript'])
         except FileNotFoundError:
             print("Error: The json file was not found.")

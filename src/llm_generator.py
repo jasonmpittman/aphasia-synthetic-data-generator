@@ -20,7 +20,7 @@ Backends supported:
 - dummy: Pipeline smoke test with placeholder outputs.
 
 Usage:
-    python cat_rescue_runner.py \
+    python llm_generator.py \
         --prompt-pack-dir /path/to/cat_rescue_synthetic_promptpack \
         --output-dir /path/to/outputs \
         --backend transformers_local \

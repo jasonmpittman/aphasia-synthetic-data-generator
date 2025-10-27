@@ -7,8 +7,6 @@ __maintainer__ = "Jason M. Pittman"
 __status__ = "Research"
 
 """
-
-
 Lexical richness measures derived from:
 Yang, Y., & Zheng, Z. (2024). A Refined and Concise Model of Indices for Quantitatively Measuring Lexical Richness of Chinese University Students' EFL Writing. Contemporary Educational Technology, 16(3).
 """

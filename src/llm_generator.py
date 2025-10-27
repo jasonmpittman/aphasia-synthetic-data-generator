@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 __author__ = "Jason M. Pittman"
 __copyright__ = "Copyright 2025"
 __credits__ = ["Jason M. Pittman"]
@@ -11,12 +10,11 @@ __status__ = "Research"
 LLM Cat Rescue Synthetic Transcript Generator
 
 This script loads the Cat Rescue prompt pack (config, core-facts lexicon, and per-model prompts),
-generates synthetic transcripts one model at a time, computes CIU/core-facts metrics, applies QC,
-and saves results to JSONL/CSV.
+generates synthetic transcripts one model at a time, applies QC, and saves results to JSONL/CSV.
 
 Backends supported:
 - transformers_local: Run Hugging Face `transformers` models locally (Apple Silicon M-series supported).
-- openai_compatible: Use any OpenAI-compatible endpoint (vLLM, hosted gateway).
+- openai_compatible: Use any OpenAI-compatible endpoint (vLLM, hosted gateway). #   not tested
 - dummy: Pipeline smoke test with placeholder outputs.
 
 Usage:

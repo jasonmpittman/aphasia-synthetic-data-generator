@@ -18,27 +18,74 @@ This project provides source code and instructions associated with two programma
 ```
 .
 ├── README.md
-├── code
 ├── data
 ├── docs
 │   ├── article
 │   ├── notes
 │   └── presentation
-├── logs
-├── results
-│   └── figures
 ├── src
-└── scratch
 ```
 
 # Instructions
-The project was developed using Python 3.9.6. To install the necessary packages, run:
+The project was developed using Python 3.9.6 on an Apple M4 silicon system.
 
+To install the necessary packages, run:
 ``` 
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
+
+**Note:** If you are on a different operating system, or wish to use a different project directory structure, please edit paths in the generator and analyses programs.
+
+## Procedural Method
+The *procedural* method can be run using the following:
+```
+python3 src/procedural_generatory.py
+```
+
+This will:
+- Produce 10,000 examples evenly split across severities (Mild/Moderate/Severe/Very Severe).
+- Uses sentence-level templates of the cat-rescue scenario.
+- Applies severity-specific augmentations (dropping, paraphasias, fillers).
+- Computes Word and CIU metrics using simplified lexical rules.
+- Writes three JSONL files: train.jsonl, validation.jsonl, and test.jsonl.
+
+Output is written to the `data/procedural` directory by default.
+
+## ML (LLM) Method
+The *large language model* method can be run using a command structure concisting of calling the program followed by 5 arguments. For example, the specific prompts used to generate the transcripts in the [data](data/llm/) directory were:
+```
+python3 src/llm_generator.py \
+--prompt-pack-dir src/cat_rescue_synthetic_promptpack \
+--output-dir data/llm \
+--prompt-model llama3.1-8b \
+--hf-model-id meta-llama/Meta-Llama-3.1-8B-Instruct \
+--samples-per-severity 8
+
+python3 src/llm_generator.py \
+--prompt-pack-dir src/cat_rescue_synthetic_promptpack \
+--output-dir data/llm \
+--prompt-model mistral \
+--hf-model-id mistralai/Mistral-7B-Instruct-v0.3 \
+--samples-per-severity 8
+```
+
+Output is written to the `data\llm` directory by default.
+
+## Analysis
+If you want to perform analysis of your generated transcripts, you can run:
+```
+python3 src/transcript_analysis.py -in <file> -s <severity> -op <operation>
+```
+
+If you want the additional Word and CIU analyses for the ML/LLM method, you can run:
+```
+python3 src/augment_llm_metrics.py
+```
+
+Word and CIU analysis for the procedural method can be performed manually using the columns or keys in the output files.
+
 
 # Links
 (Paper)[http://url.com]

@@ -1,5 +1,7 @@
 # Aphasia Synthetic Data Generators
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17542988.svg)](https://doi.org/10.5281/zenodo.17542988)
+
 Date created: October 07, 2025  
 Last updated: 0ctober 19, 2025
 

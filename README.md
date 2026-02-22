@@ -90,6 +90,6 @@ Word and CIU analysis for the procedural method can be performed manually using 
 
 
 # Links
-(Paper)[https://arxiv.org/abs/2510.24817]
+[Paper](https://arxiv.org/abs/2510.24817)
 
 
